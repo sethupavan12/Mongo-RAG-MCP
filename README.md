@@ -1,264 +1,183 @@
-# MongoDB RAG MCP Demo 🚀
+# 🚀 MongoDB RAG MCP Demo
 
-A cutting-edge AI-powered document analysis system built for the MongoDB & GitLab hackathon, showcasing the power of MongoDB Vector Search combined with Model Context Protocol (MCP) architecture.
+An AI-powered document analysis system showcasing the power of **MongoDB Atlas Vector Search** and **Model Context Protocol (MCP)** — built for the MongoDB & GitLab Hackathon 2024.
 
-## 🎯 Project Overview
+---
 
-This project demonstrates a complete Retrieval-Augmented Generation (RAG) pipeline using:
-- **MongoDB Atlas Vector Search** for intelligent document retrieval
-- **FastMCP Server** for scalable AI tool integration
-- **OpenAI GPT-4o-mini** for intelligent document analysis
-- **Next.js 15** with terminal-style UI for professional presentation
+## 🎯 Overview
 
-### 🏆 Hackathon Challenge
-**MongoDB Track**: AI-driven solution using MongoDB's search and vector search capabilities with Google Cloud integrations to help users understand and interact with document data.
+This project rethinks RAG architecture by placing an **Agentic System (via MCP)** at its core — not retrieval, not orchestration. Built as a full-stack, production-ready demo, it answers natural language questions about contracts using:
+
+- **MongoDB Atlas** for vector similarity search  
+- **OpenAI GPT-4o-mini** for context-aware reasoning  
+- **FastMCP** protocol server for AI-database abstraction  
+- **Next.js 15 frontend** with a terminal-style UI  
+
+---
 
 ## ✨ Key Features
 
-- 🔍 **Real-time Vector Search** - Semantic similarity search across 666+ contract document chunks
-- 🤖 **AI-Powered Analysis** - Natural language responses based on actual document content
-- 🖥️ **Terminal Interface** - Authentic terminal aesthetic with real-time processing logs
-- 🔄 **MCP Architecture** - Scalable Model Context Protocol server implementation
-- 📊 **Smart Ranking** - Similarity scores and source attribution for transparency
-- ⚡ **Fast Performance** - Optimized vector embeddings with text-embedding-ada-002
+- 🔍 **Semantic Vector Search** — Real-time similarity search across 600+ contract chunks  
+- 🤖 **AI-Powered Legal Analysis** — Ask: _“What are the payment terms?”_  
+- 🧠 **MCP Architecture** — RAG lives inside the agent, not outside  
+- 🖥️ **Terminal UI** — Command-line aesthetic with real-time logs  
+- 📊 **Source Attribution** — Each answer includes origin excerpts + similarity score  
+- ⚡ **Fast Performance** — Sub-10s E2E latency, backed by `text-embedding-ada-002`  
+
+---
 
 ## 🏗️ Project Architecture
-
-```
 mongodb_gitlab/
-├── mongodb_mcp_server/          # FastMCP Server Implementation
-│   ├── main.py                  # Core MCP tools: query_contract, search_documents, ingest_document
-│   ├── config.py                # Environment configuration
-│   ├── services/                # Core business logic
-│   │   ├── mongodb_client.py    # MongoDB Atlas vector operations
-│   │   ├── embeddings.py        # OpenAI embedding generation
-│   │   └── unstructured_client.py # Document processing
-│   ├── tools/                   # Document processing utilities
-│   └── examples/                # Sample documents and demos
-│
-├── contract-analyzer-ui/        # Next.js 15 Frontend
-│   ├── src/app/
-│   │   ├── page.tsx            # Main terminal interface
-│   │   ├── layout.tsx          # App layout and metadata
-│   │   └── api/query-mcp/      # Backend API integration
-│   ├── package.json            # Dependencies and scripts
-│   └── vercel.json            # Deployment configuration
-│
-└── README.md                   # This comprehensive documentation
-```
+├── mongodb_mcp_server/         # FastMCP Server
+│   ├── main.py                 # MCP Tools: query, search, ingest
+│   ├── services/               # MongoDB + OpenAI logic
+│   └── tools/                  # Unstructured document processing
+├── contract-analyzer-ui/      # Next.js 15 Terminal UI
+│   └── src/app/api/query-mcp/ # Streamable MCP endpoint
+└── README.md
+
+---
 
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js 18+ and npm
-- Python 3.9+ with pip
-- MongoDB Atlas account with vector search enabled
-- OpenAI API key
 
-### 1. Clone and Setup
-```bash
-git clone <your-repo>
-cd mongodb_gitlab
-```
+- Node.js 18+, Python 3.9+  
+- MongoDB Atlas w/ Vector Search  
+- OpenAI API Key  
 
-### 2. Configure MCP Server
+### 1. Backend
+
 ```bash
 cd mongodb_mcp_server
-
-# Create virtual environment
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install dependencies
+source venv/bin/activate
 pip install -r requirements.txt
-
-# Configure environment
-cp .env.example .env
-# Edit .env with your MongoDB Atlas and OpenAI credentials
+cp .env.example .env  # Add MongoDB + OpenAI keys
 ```
 
-### 3. Launch Frontend
+### 2. Frontend
 ```bash
 cd contract-analyzer-ui
 npm install
 npm run dev
 ```
 
-### 4. Access Demo
-Open http://localhost:3000 (or 3001 if 3000 is busy)
+Open http://localhost:3000
+MCP server is called automatically through the API.
 
-**The MCP server will start automatically when you make queries!**
-
-### Optional: Test MCP Server Manually
-```bash
-# Get server information
-python start_mcp_server.py
-
-# Run server in HTTP mode for testing
-python start_mcp_server.py --http
+### ENV
 ```
-
-## 🔧 Environment Configuration
-
-Create `mongodb_mcp_server/.env`:
-```env
-# MongoDB Atlas Configuration
+# MongoDB Atlas
 MONGODB_URI=mongodb+srv://your-cluster.mongodb.net/
 MONGODB_DATABASE=vector_rag
 MONGODB_COLLECTION=contract_analysis
 
-# OpenAI Configuration
+# OpenAI
 OPENAI_API_KEY=your-openai-api-key
 
-# Vector Search Configuration
+# Vector Index
 VECTOR_INDEX_NAME=vector_index
 EMBEDDING_DIMENSION=1536
 SIMILARITY_THRESHOLD=0.7
+
 ```
 
 ## 📊 Core Components
 
-### MCP Server Tools (`mongodb_mcp_server/main.py`)
+### MCP Server Tools (`main.py`)
+- `query_contract(question, collection_name, limit, similarity_threshold)`  
+  → Full RAG pipeline with semantic grounding and source attribution  
+- `search_documents(query, collection_name, limit, similarity_threshold)`  
+  → Pure vector search with similarity scoring  
+- `ingest_document(document_url, collection_name, chunking_strategy)`  
+  → Adds new documents to vector DB (PDF, DOCX, TXT via Unstructured.io)
 
-#### `query_contract(question, collection_name, limit, similarity_threshold)`
-- **Purpose**: AI-powered contract analysis with natural language responses
-- **Process**: Vector search → Context preparation → GPT analysis → Formatted response
-- **Returns**: Professional contract analysis with source citations
+### Frontend Interface (`page.tsx`)
+- Terminal-style interaction with real-time logs  
+- GPT responses with markdown rendering  
+- Responsive design (desktop/mobile)
 
-#### `search_documents(query, collection_name, limit, similarity_threshold)`
-- **Purpose**: Raw vector search for document chunks
-- **Returns**: Ranked document excerpts with similarity scores
+### API Integration (`query-mcp/route.ts`)
+- Connects frontend to MCP server using streamable JSON-RPC  
+- Handles timeouts, errors, and invalid queries gracefully  
 
-#### `ingest_document(document_url, collection_name, chunking_strategy)`
-- **Purpose**: Process and store new documents in vector database
-- **Supports**: PDF, DOCX, TXT files via Unstructured.io
 
-### Frontend Interface (`contract-analyzer-ui/src/app/page.tsx`)
-
-- **Terminal Simulation**: Authentic command-line experience
-- **Real-time Logs**: Processing visualization
-- **Markdown Rendering**: Properly formatted AI responses
-- **Responsive Design**: Works on desktop and mobile
-
-### API Integration (`contract-analyzer-ui/src/app/api/query-mcp/route.ts`)
-
-- **HTTP Client**: Connects to standalone MCP server via Streamable HTTP
-- **MCP Protocol**: Uses proper JSON-RPC calls to MCP tools
-- **Error Handling**: Graceful fallbacks and helpful error messages
 
 ## 🎨 UI Design Philosophy
 
-**Terminal Aesthetic**:
-- Pure black background (`bg-black`)
-- Classic terminal colors (green, cyan, orange, blue)
-- Monospace fonts for authentic feel
-- Mac-style window controls
-- Real-time processing logs
+### Terminal Aesthetic
+- Black background  
+- Classic terminal colors (green, orange, cyan)  
+- Monospace fonts  
+- Mac-style window chrome  
+- Real-time processing log feedback  
 
-**Markdown Styling**:
-- Bold text in yellow for emphasis
-- Headers in orange/cyan for structure
-- Code blocks with green terminal colors
-- Proper spacing and typography
+### Markdown Rendering
+- Yellow bolds, cyan/orange headers  
+- Code blocks with terminal themes  
+- Structured output and readable formatting  
+
 
 ## 📈 Performance & Scale
+- ✅ 666 embedded chunks (OpenAI ada-002)  
+- ⚡ Sub-second vector search  
+- 🧠 Sub-10s total roundtrip latency  
+- 🌐 Horizontally scalable via MongoDB + FastMCP  
 
-**Current Dataset**:
-- **666 document chunks** from sample contract
-- **1536-dimensional embeddings** (OpenAI ada-002)
-- **Sub-second query response** times
-- **Production-ready** error handling
-
-**Scalability**:
-- Supports unlimited documents via MongoDB Atlas
-- Horizontal scaling through MCP architecture
-- Efficient vector indexing for large datasets
-
-## 🚀 Deployment
-
-### Vercel (Frontend)
-```bash
-cd contract-analyzer-ui
-npm run build
-# Deploy to Vercel with MongoDB MCP server accessible
-```
-
-### Production Considerations
-- Ensure MongoDB Atlas whitelist includes deployment IPs
-- Set production environment variables
-- Configure CORS for API access
-- Monitor OpenAI API usage and rate limits
 
 ## 🛠️ Technology Stack
 
-**Backend**:
-- **FastMCP**: Model Context Protocol server framework
-- **MongoDB Atlas**: Vector database with semantic search
-- **OpenAI API**: Embeddings (ada-002) and completion (GPT-4o-mini)
-- **Unstructured.io**: Document processing and chunking
+### Backend
+- FastAPI + Python (MCP Server)  
+- MongoDB Atlas (Vector DB)  
+- OpenAI GPT-4o-mini  
+- Unstructured.io (Document Parsing)
 
-**Frontend**:
-- **Next.js 15**: React framework with Turbopack
-- **TypeScript**: Type-safe development
-- **Tailwind CSS**: Utility-first styling
-- **React Markdown**: Formatted AI response rendering
+### Frontend
+- Next.js 15 + TypeScript  
+- Tailwind CSS  
+- React Markdown
 
-**DevOps**:
-- **Vercel**: Frontend deployment platform
-- **Python venv**: Isolated server environment
-- **npm**: Package management and build tools
-
-## 📝 Sample Queries
-
-Try these example queries in the demo:
-
-```
-"What are the payment terms in this contract?"
-"Can you explain clause 16.1.2?"
-"What happens if either party wants to terminate?"
-"Who is responsible for delivery of services?"
-"What are the liability limitations?"
-"Can you summarize the key obligations?"
-```
-
-## 🎯 Hackathon Achievements
-
-**Technical Innovation**:
-- Novel combination of MongoDB Vector Search + MCP architecture
-- Real-time AI analysis with source attribution
-- Production-ready deployment configuration
-
-**User Experience**:
-- Intuitive terminal interface design
-- Professional markdown formatting
-- Real-time processing transparency
-
-**Scalability**:
-- Modular MCP server architecture
-- Cloud-native MongoDB Atlas integration
-- Extensible for multiple document types
-
-## 🔮 Future Enhancements
-
-- **Multi-language Support**: Expand beyond English documents
-- **Advanced Chunking**: Implement intelligent semantic chunking
-- **Real-time Collaboration**: Multi-user document analysis
-- **Custom Models**: Fine-tuned embedding models for legal documents
-- **Integration APIs**: REST/GraphQL APIs for external systems
-
-## 🏆 Live Demo
-
-Visit the deployed application: [Your Deployment URL]
-
-**Demo Credentials**: No authentication required - fully functional demo with sample contract data.
-
-## 📧 Contact
-
-Built for MongoDB & GitLab Hackathon 2024
-- **Developer**: [Your Name]
-- **GitHub**: [Your GitHub Profile]
-- **Demo Video**: [Your 3-minute demo video URL]
+### DevOps
+- Vercel (Frontend Hosting)  
+- Google Cloud Run (MCP Backend)  
+- Python venv + npm  
 
 ---
 
-*This project showcases the powerful combination of MongoDB's intelligent data platform with cutting-edge AI technologies, creating a scalable foundation for document analysis applications across industries.* 
+## 📝 Sample Queries
+
+Try these:
+- “What are the payment terms?”  
+- “Can you summarize clause 16?”  
+- “Who can terminate the agreement?”  
+- “What are the liability limitations?”  
+- “Can you list key obligations?”  
+
+
+## 🔮 Future Enhancements
+- 📤 Upload pipeline for custom docs  
+- 🧠 Intelligent semantic chunking  
+- 🔐 Role-based multi-user access  
+- 🌍 Multi-language support  
+- 🧩 REST & GraphQL APIs  
+- 📈 Real-time collab on contracts  
+
+
+## 🏆 Hackathon Achievements
+
+### Technical
+- Modular MCP server design  
+- Real-time vector-backed agent reasoning  
+- Cloud-native infra w/ production config  
+
+### UX
+- Terminal-style UI that feels familiar  
+- Structured answers w/ full citations  
+- Live status logs, zero setup friction  
+
+### Scalability
+- Works across domains: law, HR, policy, docs  
+- Plug-and-play MongoDB collections  
+- Built to support 1 → ∞ documents  
