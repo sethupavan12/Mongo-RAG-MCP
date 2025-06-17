@@ -1,6 +1,6 @@
 # 🚀 MongoDB RAG MCP Demo
 
-An AI-powered document analysis system showcasing the power of **MongoDB Atlas Vector Search** and **Model Context Protocol (MCP)** — built for the MongoDB & GitLab Hackathon 2024.
+An AI-powered document analysis system showcasing the power of **MongoDB Atlas Vector Search** and **Model Context Protocol (MCP)** — built for the AI in Action by GCP 2025.
 
 ---
 
