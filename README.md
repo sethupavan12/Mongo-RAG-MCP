@@ -26,17 +26,10 @@ This project rethinks RAG architecture by placing an **Agentic System (via MCP)*
 
 ---
 
-## 🏗️ Project Architecture
-mongodb_gitlab/
-├── mongodb_mcp_server/         # FastMCP Server
-│   ├── main.py                 # MCP Tools: query, search, ingest
-│   ├── services/               # MongoDB + OpenAI logic
-│   └── tools/                  # Unstructured document processing
-├── contract-analyzer-ui/      # Next.js 15 Terminal UI
-│   └── src/app/api/query-mcp/ # Streamable MCP endpoint
-└── README.md
+## 🏗️ Architecture
 
----
+![Screenshot 2025-06-18 at 3 10 34 AM](https://github.com/user-attachments/assets/05ffa152-adbd-46e0-b1f3-45c69f8e12b1)
+
 
 ## 🚀 Quick Start
 
